@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+{% block header %}{% endblock %}
+</head>
+
+<body >
+     <h1 class="font-bold text-4xl " align="center">AI FAQ Chatbot</h1>
+    
+    <div class="p-0 m-0">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+    <footer>
+        {% block other_footers %}{% endblock %}
+    </footer>
+
+</html>

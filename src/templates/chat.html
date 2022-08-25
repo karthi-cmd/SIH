@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="css/chat_interface.css") }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="css/temporary.css") }}">
+<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300|Open+Sans:300|Oxygen|Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+
+            <div id="display" class="chat_window mx-auto rounded-2xl b object-right-bottom popup  mr-5 mb-8 "> 
+                
+                <div class="bg-slate-600 rounded-t-2xl flex justify-start py-4 m-0">
+                    <img src="../static/img/owl.png" class="rounded-full ml-4" />
+                    <div class="bg-green-500 w-2 rounded-full h-2 left-0 mt-12 "></div>
+                    <div class="my-auto">
+                        <h3 class="text-white text-2xl font-semibold   mx-4">RS BOT </h3>
+                        <h5 class="text-white/75 text-sm font-semibold   mx-4">Online</h5>
+
+                       
+                    </div>
+                    <div class="border-2 border-white  absolute top-0 right-0 m-4 rounded-full ">
+                        <button type="button" class="px-3 py-1.5 text-white" onclick="closeForm()">X
+                        </button>
+                    </div>
+                </div>
+                <ul class="messages "></ul>
+
+        
+                <div class=" pt-3 border-slate-500 flex justify-evenly ">
+                    <div class="w-11/12 px-2 pb-4">
+                        
+                        <input  id="msg_input" class="p-2 message_input bg-white/50 w-full h-9 rounded-lg border border-gray-900 "
+                    placeholder=" Type Something to get started..." />
+                    </div>
+                    <button  class="send_message bg-slate-700 hover:bg-slate-900 text-white font-bold py-2 px-3 rounded-full mb-4 mx-2">
+                         <div class="text ">send</div>
+                    </button>
+                    
+
+
+                </div>
+            </div>
+            <div class="message_template">
+                <li class="message">
+                    <div class="avatar "></div>
+                    <div class="text_wrapper">
+                        <div class="text"></div>
+                    </div>
+                </li>
+            </div>
+
+           
+            <div class=" absolute bottom-0 right-0 m-4 rounded-full mr-6 mb-9" ">
+                <button type="button" class="px-3 py-1.5 text-black" onclick="openForm()">
+                    <img class="rounded-full" src="../static/img/owl.png">
+                </button>
+            </div>
+           
+
+{% endblock %}
+
+{% block other_footers %}
+<script src="{{ url_for('static', filename='js/bind.js') }}"></script>
+
+{% endblock %}
