@@ -1,1 +1,0 @@
-faqmodel = FaqEngine(faqslist)
