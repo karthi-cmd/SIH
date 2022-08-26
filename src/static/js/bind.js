@@ -48,7 +48,7 @@ function thumb(){
     var text = document.getElementsByClassName("messages")[0];
     text.appendChild(button);
     button.addEventListener("click",function(){
-        alert("you have clicked thumb");
+        alert("Your response has been stored");
     })
 }
 function sayToBot(text){

@@ -2,13 +2,18 @@
 from datetime import datetime
 from deep_translator import GoogleTranslator
 from flask import Flask, flash,render_template,jsonify,request
-from faqengine import *
+from semantic_search import semmantic
 from gtts import gTTS
 from googletrans import Translator
 import speech_recognition
 from twilio.twiml.messaging_response import MessagingResponse
 import wikipedia
 import os
+from telegram.ext import *
+from telegram.ext.filters import Filters
+from telegram.ext.updater import Updater
+from telegram.update import Update
+from PyPDF2 import PdfReader
 
 # import nltk
 # nltk.download(('punkt'))
@@ -19,12 +24,12 @@ app.secret_key = '12345'
 translator = Translator()
 language = "en"
 
-faqslist = ["src/data/Working/UGC_2.csv","src/data/Working/UGC_3.csv","src/data/Working/Greetings.csv"]
-faqmodel = FaqEngine(faqslist)
+faqslist = ["src/data/Working/UGC_2.csv"]
+
 
 def get_response(user_message): 
     global language
-    return faqmodel.query(user_message)
+    return semmantic(faqslist,user_message)
 
 @app.route('/')
 def home():
@@ -50,7 +55,7 @@ def chat():
 
             elif language == "hi":
                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
-                voice_translate(translated_msg,"hi")
+                #voice_translate(translated_msg,"hi")
                 response_text = get_response(translated_msg)
                 translated_response = GoogleTranslator(source="en", target='hi').translate(response_text)
                 return jsonify({"status":"success","response":translated_response})
@@ -60,6 +65,27 @@ def chat():
                 # voice_translate(translated_msg,"ta")
                 response_text = get_response(translated_msg)
                 translated_response = GoogleTranslator(source="en", target='ta').translate(response_text)
+                return jsonify({"status":"success","response":translated_response})
+            
+            elif language == "te":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
+                # voice_translate(translated_msg,"ta")
+                response_text = get_response(translated_msg)
+                translated_response = GoogleTranslator(source="en", target='te').translate(response_text)
+                return jsonify({"status":"success","response":translated_response})
+
+            elif language == "gu":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
+                # voice_translate(translated_msg,"ta")
+                response_text = get_response(translated_msg)
+                translated_response = GoogleTranslator(source="en", target='gu').translate(response_text)
+                return jsonify({"status":"success","response":translated_response})
+
+            elif language == "ml":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
+                # voice_translate(translated_msg,"ta")
+                response_text = get_response(translated_msg)
+                translated_response = GoogleTranslator(source="en", target='ml').translate(response_text)
                 return jsonify({"status":"success","response":translated_response})
 
         
@@ -95,39 +121,58 @@ def whatsapp():
     response.message(reply)
     return str(response)
 
-# @app.route('/tele')
-# def telegram():
-#     updater = Updater("5437110366:AAFwUPMgIpIijW0RaJeTnMPRsE5tGy4ZhuQ",use_context=True)
-#     def start(update: Update, context: CallbackContext):
-#         update.message.reply_text("testing.......\n /start - To start the bot")
+
+def telegram():
+    updater = Updater("5437110366:AAFwUPMgIpIijW0RaJeTnMPRsE5tGy4ZhuQ",use_context=True)
+    def start(update: Update, context: CallbackContext):
+        update.message.reply_text("testing.......\n /start - To start the bot")
     
-#     def query(update:Update,context:CallbackContext):
-#         try:
-#             user_msg=update.message.text
-#             language =  (translator.detect(user_msg)).lang
-#             if language == "en":
-#                 result=get_response(user_msg)
-#                 update.message.reply_text("%s"%result) 
-#             elif language == "hi":
-#                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
-#                 translated_response = get_response(translated_msg)
-#                 result = GoogleTranslator(source="en", target='hi').translate(translated_response)
-#                 update.message.reply_text("%s"%result)
-#             elif language == "ta":
-#                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
-#                 translated_response = get_response(translated_msg)
-#                 result = GoogleTranslator(source="en", target='ta').translate(translated_response)
-#                 update.message.reply_text("%s"%result)
+    def query(update:Update,context:CallbackContext):
+        try:
+            user_msg=update.message.text
+            print(user_msg)
+            language =  (translator.detect(user_msg)).lang
+            if language == "en":
+                result=get_response(user_msg)
+                update.message.reply_text("%s"%result) 
+            elif language == "hi":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
+                translated_response = get_response(translated_msg)
+                result = GoogleTranslator(source="en", target='hi').translate(translated_response)
+                update.message.reply_text("%s"%result)
+            elif language == "ta":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
+                translated_response = get_response(translated_msg)
+                result = GoogleTranslator(source="en", target='ta').translate(translated_response)
+                update.message.reply_text("%s"%result)
+
+            elif language == "gu":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
+                translated_response = get_response(translated_msg)
+                result = GoogleTranslator(source="en", target='gu').translate(translated_response)
+                update.message.reply_text("%s"%result)
+
+            elif language == "te":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
+                translated_response = get_response(translated_msg)
+                result = GoogleTranslator(source="en", target='te').translate(translated_response)
+                update.message.reply_text("%s"%result)
+
+            elif language == "ml":
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
+                translated_response = get_response(translated_msg)
+                result = GoogleTranslator(source="en", target='ml').translate(translated_response)
+                update.message.reply_text("%s"%result)
                 
 
-#         except Exception as e:
-#             print(e)
+        except Exception as e:
+            print(e)
         
-#     updater.dispatcher.add_handler(CommandHandler('start', start))
-#     updater.dispatcher.add_handler(MessageHandler(Filters.text,query))
-#     updater.start_polling()
+    updater.dispatcher.add_handler(CommandHandler('start', start))
+    updater.dispatcher.add_handler(MessageHandler(Filters.text,query))
+    updater.start_polling()
 
-
+telegram()
 
 @app.route('/speech')
 def speech():
@@ -155,6 +200,26 @@ def speech():
 
 
 
+@app.route('/admin',methods=['GET','POST'])
+def admin():
+    if request.method == 'POST':
+        question = request.form.get('question')
+        answer = request.form.get('answer')
+        f = open('src/data/user/user.csv','a')
+        f.write(question+','+answer+'\n')
+       
+        f = request.files['file']
+        f.save(f.filename)
+        name = f.filename
+        print(name)
+        reader = PdfReader(f"{name}")
+        number_of_pages = len(reader.pages)
+        page = reader.pages[0]
+        text = page.extract_text()
+        print(text)
+        return 'file uploaded successfully'
+
+    return render_template("admin.html")
 
 # Voice Translator
 def voice_translate(og,conv):

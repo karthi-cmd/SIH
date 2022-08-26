@@ -1,1 +1,1 @@
-answer = pd.read_csv('src/data/Working/Greetings.csv')['Answer'].tolist()
+faqmodel = FaqEngine(faqslist)

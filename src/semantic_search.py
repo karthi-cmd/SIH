@@ -65,6 +65,4 @@ def semmantic(faqslist,user_message):
 
     for score, idx in zip(top_results[0], top_results[1]):
         print(corpus[idx])
-user_message = "how good was your day?"
-faqslist = ['src/data/Working/Greetings.csv']
-semmantic(faqslist,user_message)
+        return corpus[idx]

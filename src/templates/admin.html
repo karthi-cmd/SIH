@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <nav class="bg-white border-gray-200 dark:bg-gray-900 py-2">
+        <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl px-4 md:px-6 py-2.5">
+            <div class="flex items-center">
+                <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
+                    <li>
+                        <a href="#" class="text-gray-900 text-lg dark:text-white hover:underline"
+                            aria-current="page">Home</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="flex items-center">
+                <a href="#" class="text-sm px-3 font-medium text-blue-600 dark:text-blue-500 hover:underline">Login</a>
+                <a href="#" class="text-sm font-medium text-blue-600 dark:text-blue-500 hover:underline">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <h1
+            class="flex flex-col text-center text-2xl font-medium tracking-tight leading-none text-gray-900 md:text-2xl lg:text-6xl dark:text-black">
+            Database Updation</h1>
+
+    </div>
+    <div class="mx-auto px-20 ">
+        <form class=" border-gray-600 border-2 p-5 mt-7 " action="{{ url_for('admin')}}" method="POST" enctype="multipart/form-data">
+            <div class="mb-6">
+
+                <label for="message" class="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-400">Enter the question</label>
+                <textarea id="message" name="question" rows="2"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+                    placeholder="Your message..."></textarea>
+
+                <label for="message" class="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-400">Enter the answer</label>
+                <textarea id="message" name="answer" rows="2"
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
+                        placeholder="Your message..."></textarea>
+
+            </div>
+            <div class="mb-6">
+
+                <div class=" justify-center items-center w-full">
+                    <label class="block mb-2 text-xl font-medium text-gray-900 dark:text-gray-400">Upload the
+                        Document</label>
+                    <label for="dropzone-file"
+                        class="flex flex-col justify-center items-center w-full h-48 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer ">
+                        <div class="flex flex-col justify-center items-center pt-5 pb-6">
+                            <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                                </path>
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click
+                                    to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Upload a PDF file
+                            </p>
+                        </div>
+                        <input id="dropzone-file" name="file" type="file" >
+                    </label>
+                </div>
+
+            </div>
+            <div class="flex items-start mb-6">
+
+            </div>
+            <button type="submit" onclick="alert('Your Response is updated in database')"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+        </form>
+    </div>
+
+
+</body>
+
+</html>
