@@ -13,7 +13,7 @@ from telegram.ext import *
 from telegram.ext.filters import Filters
 from telegram.ext.updater import Updater
 from telegram.update import Update
-from PyPDF2 import PdfReader
+# from PyPDF2 import PdfReader
 
 # import nltk
 # nltk.download(('punkt'))
@@ -26,6 +26,16 @@ language = "en"
 
 faqslist = ["src/data/Working/UGC_2.csv"]
 
+def spell_check(msg):
+    msg_dict=msg
+    msg_dict=msg_dict.split(" ")
+    for i in msg_dict:
+       resp=open('data\words_set.txt', 'r').read().find(i)
+       if resp==-1:
+           return False
+       else:
+           continue
+    return True
 
 def get_response(user_message): 
     global language
@@ -39,7 +49,8 @@ def home():
 def chat():
     try:
         global language, user_message
-        user_message = request.form["text"]  
+        user_message = request.form["text"] 
+         
         # Number check in string
         # if any(map(str.isdigit, user_message)):
         #     return jsonify({"status":"success","response":"The answer is "+ str(eval(user_message))})
@@ -48,10 +59,14 @@ def chat():
         if 'w!' not in user_message:
 
             if language == "en":
-                response_text = get_response(user_message)
-                #voice_translate(translated_msg,"en")
-                writeToHistory(user_message,response_text)
-                return jsonify({"status":"success","response":response_text})
+                resp=spell_check(user_message)
+                if resp:
+                    response_text = get_response(user_message)
+                    #voice_translate(translated_msg,"en")
+                    writeToHistory(user_message,response_text)
+                    return jsonify({"status":"success","response":response_text})
+                else:
+                    return jsonify({"status":"success", "response":"check the spelling"})
 
             elif language == "hi":
                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
@@ -172,7 +187,7 @@ def telegram():
     updater.dispatcher.add_handler(MessageHandler(Filters.text,query))
     updater.start_polling()
 
-telegram()
+#telegram()
 
 @app.route('/speech')
 def speech():
@@ -212,11 +227,11 @@ def admin():
         f.save(f.filename)
         name = f.filename
         print(name)
-        reader = PdfReader(f"{name}")
-        number_of_pages = len(reader.pages)
-        page = reader.pages[0]
-        text = page.extract_text()
-        print(text)
+        # reader = PdfReader(f"{name}") #pyfreader not supported in my lap
+        # number_of_pages = len(reader.pages)
+        # page = reader.pages[0]
+        # text = page.extract_text()
+        # print(text)
         return 'file uploaded successfully'
 
     return render_template("admin.html")
