@@ -13,7 +13,7 @@ from telegram.ext import *
 from telegram.ext.filters import Filters
 from telegram.ext.updater import Updater
 from telegram.update import Update
-from PyPDF2 import PdfReader
+# from PyPDF2 import PdfReader
 
 # import nltk
 # nltk.download(('punkt'))
@@ -29,6 +29,7 @@ faqslist = ["src/data/Working/UGC_2.csv"]
 
 def get_response(user_message): 
     global language
+    print(user_message)
     return semmantic(faqslist,user_message)
 
 @app.route('/')
@@ -45,11 +46,13 @@ def chat():
         #     return jsonify({"status":"success","response":"The answer is "+ str(eval(user_message))})
             
         language =  (translator.detect(user_message)).lang
+        print(language)
         if 'w!' not in user_message:
 
             if language == "en":
                 response_text = get_response(user_message)
                 #voice_translate(translated_msg,"en")
+              
                 writeToHistory(user_message,response_text)
                 return jsonify({"status":"success","response":response_text})
 
@@ -63,6 +66,7 @@ def chat():
             elif language == "ta":
                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
                 # voice_translate(translated_msg,"ta")
+              
                 response_text = get_response(translated_msg)
                 translated_response = GoogleTranslator(source="en", target='ta').translate(response_text)
                 return jsonify({"status":"success","response":translated_response})
@@ -172,7 +176,7 @@ def telegram():
     updater.dispatcher.add_handler(MessageHandler(Filters.text,query))
     updater.start_polling()
 
-telegram()
+#telegram()
 
 @app.route('/speech')
 def speech():

@@ -61,7 +61,8 @@ def semmantic(faqslist,user_message):
 
   
     print("Query:", query)
-  
+    
+    # print(top_results)
 
     for score, idx in zip(top_results[0], top_results[1]):
         print(corpus[idx])
