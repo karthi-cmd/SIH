@@ -5,7 +5,6 @@ from flask import Flask, flash,render_template,jsonify,request
 from semantic_search import semmantic
 from gtts import gTTS
 from googletrans import Translator
-import speech_recognition
 from twilio.twiml.messaging_response import MessagingResponse
 import wikipedia
 import os
@@ -38,24 +37,28 @@ def home():
 @app.route('/chat',methods=["POST"])
 def chat():
     try:
-        global language, user_message
+        global language, user_message,translated_msg
+        
+        
         user_message = request.form["text"]  
         # Number check in string
         # if any(map(str.isdigit, user_message)):
         #     return jsonify({"status":"success","response":"The answer is "+ str(eval(user_message))})
-            
+
         language =  (translator.detect(user_message)).lang
+        
+
         if 'w!' not in user_message:
 
             if language == "en":
                 response_text = get_response(user_message)
-                #voice_translate(translated_msg,"en")
+                # voice_translate(translated_msg,"en")
                 writeToHistory(user_message,response_text)
                 return jsonify({"status":"success","response":response_text})
 
             elif language == "hi":
                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
-                #voice_translate(translated_msg,"hi")
+                voice_translate(translated_msg,"hi")
                 response_text = get_response(translated_msg)
                 translated_response = GoogleTranslator(source="en", target='hi').translate(response_text)
                 return jsonify({"status":"success","response":translated_response})
@@ -116,6 +119,12 @@ def whatsapp():
         # voice_translate(translated_msg,"hi")
         translated_response = get_response(translated_msg)
         reply = GoogleTranslator(source="en", target='hi').translate(translated_response)
+
+    elif language=="ta":
+        translated_msg = GoogleTranslator(source=language, target='en').translate(user_msg)
+        # voice_translate(translated_msg,"hi")
+        translated_response = get_response(translated_msg)
+        reply = GoogleTranslator(source="en", target='ta').translate(translated_response)
     
     
     response.message(reply)
@@ -130,7 +139,7 @@ def telegram():
     def query(update:Update,context:CallbackContext):
         try:
             user_msg=update.message.text
-            print(user_msg)
+          
             language =  (translator.detect(user_msg)).lang
             if language == "en":
                 result=get_response(user_msg)
@@ -174,28 +183,28 @@ def telegram():
 
 telegram()
 
-@app.route('/speech')
-def speech():
-    recorgnizer = speech_recognition.Recognizer()
-    text=""
-    while text!="stop":
-        try:
-            with speech_recognition.Microphone() as mic:
-                recorgnizer.adjust_for_ambient_noise(mic,duration=0.5)
-                audio = recorgnizer.listen(mic)
+# @app.route('/speech')
+# def speech():
+#     recorgnizer = speech_recognition.Recognizer()
+#     text=""
+#     while text!="stop":
+#         try:
+#             with speech_recognition.Microphone() as mic:
+#                 recorgnizer.adjust_for_ambient_noise(mic,duration=0.5)
+#                 audio = recorgnizer.listen(mic)
             
-                text = recorgnizer.recognize_google(audio)
-                response_text = get_response(text)
-                print(text)
-                flash(response_text)
-                print(response_text)
-                voice_translate(response_text,'en')
-                return render_template('test.html',response_text=response_text)
+#                 text = recorgnizer.recognize_google(audio)
+#                 response_text = get_response(text)
+#                 print(text)
+#                 flash(response_text)
+#                 print(response_text)
+#                 voice_translate(response_text,'en')
+#                 return render_template('test.html',response_text=response_text)
         
                 
-        except Exception as e:
-            print(e)
-            return ("nothing")
+#         except Exception as e:
+#             print(e)
+#             return ("nothing")
 
 
 
@@ -238,4 +247,4 @@ def writeToHistory(ques,msg):
 
 if __name__ == '__main__':
     # app.run()
-    app.run(debug=True,threaded=True)
+    app.run(threaded=True,port=8000)

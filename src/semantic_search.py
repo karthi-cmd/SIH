@@ -60,9 +60,10 @@ def semmantic(faqslist,user_message):
         top_results = torch.topk(cos_scores, k=top_k)
 
   
-    print("Query:", query)
+    # print("Query:", query)
   
 
     for score, idx in zip(top_results[0], top_results[1]):
+ 
         print(corpus[idx])
         return corpus[idx]
