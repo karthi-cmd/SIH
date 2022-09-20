@@ -5,7 +5,7 @@ from flask import Flask, flash,render_template,jsonify,request
 from semantic_search import semmantic
 from gtts import gTTS
 from googletrans import Translator
-import speech_recognition
+
 from twilio.twiml.messaging_response import MessagingResponse
 import wikipedia
 import os
@@ -26,16 +26,16 @@ language = "en"
 
 faqslist = ["src/data/Working/UGC_2.csv"]
 
-def spell_check(msg):
-    msg_dict=msg
-    msg_dict=msg_dict.split(" ")
-    for i in msg_dict:
-       resp=open('data\words_set.txt', 'r').read().find(i)
-       if resp==-1:
-           return False
-       else:
-           continue
-    return True
+# def spell_check(msg):
+#     msg_dict=msg
+#     msg_dict=msg_dict.split(" ")
+#     for i in msg_dict:
+#        resp=open('data\words_set.txt', 'r').read().find(i)
+#        if resp==-1:
+#            return False
+#        else:
+#            continue
+#     return True
 
 def get_response(user_message): 
     global language
@@ -58,15 +58,14 @@ def chat():
         language =  (translator.detect(user_message)).lang
         if 'w!' not in user_message:
 
+            
             if language == "en":
-                resp=spell_check(user_message)
-                if resp:
-                    response_text = get_response(user_message)
-                    #voice_translate(translated_msg,"en")
-                    writeToHistory(user_message,response_text)
-                    return jsonify({"status":"success","response":response_text})
-                else:
-                    return jsonify({"status":"success", "response":"check the spelling"})
+                translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
+                #voice_translate(translated_msg,"hi")
+                response_text = get_response(translated_msg)
+                translated_response = GoogleTranslator(source="en", target='en').translate(response_text)
+                return jsonify({"status":"success","response":translated_response})
+            
 
             elif language == "hi":
                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)

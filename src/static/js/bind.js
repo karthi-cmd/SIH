@@ -50,11 +50,9 @@ function thumb(){
     var text = document.getElementsByClassName("messages")[0];
     text.appendChild(button);
     button.addEventListener("click",function(){
-<<<<<<< HEAD
+
         alert("Your response has been stored");
-=======
-        alert("Your response has been registered!");
->>>>>>> main
+
     })
  }
 // function thumb(){
