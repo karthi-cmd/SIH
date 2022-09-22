@@ -61,7 +61,7 @@ def chat():
             
             if language == "en":
                 translated_msg = GoogleTranslator(source=language, target='en').translate(user_message)
-                #voice_translate(translated_msg,"hi")
+                # voice_translate(translated_msg,"en")
                 response_text = get_response(translated_msg)
                 translated_response = GoogleTranslator(source="en", target='en').translate(response_text)
                 return jsonify({"status":"success","response":translated_response})
