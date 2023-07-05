@@ -1,0 +1,26 @@
+.chat_window{
+	padding: 0;
+    margin: 0;
+}
+.messages{
+	height: calc(70vh - 250px);
+}
+
+
+.messages .message.left .text {
+    color: black !important;
+    font-weight: inherit;
+}
+
+#msg_input{
+    color: black;
+}
+.popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    transition: 5s ease-out;
+  }
