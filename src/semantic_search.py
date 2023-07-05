@@ -1,10 +1,8 @@
 
 
-import string
 from sentence_transformers import SentenceTransformer, util
 import torch
 import pandas  as pd 
-import re
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
 def semmantic(faqslist,user_message):
     for i in range(0,len(faqslist)):
@@ -33,11 +31,5 @@ def semmantic(faqslist,user_message):
   
 
     for score, idx in zip(top_results[0], top_results[1]):
-        # print(corpus[idx])
-        urls = re.findall('(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-&?=%.]+', corpus[idx])
-        if urls == []:
-            return corpus[idx]
-        else:
-            url = '<a target="_blank" href = "  '+urls[0] + '" ' + ' ">' + urls[0] +'</a>'
-            ans = corpus[idx].replace(urls[0],url)
-            return ans
+        print(corpus[idx])
+        return corpus[idx]
